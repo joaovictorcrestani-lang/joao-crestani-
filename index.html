@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Motos Elétricas — Como Funcionam</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --card: #16161f;
+      --accent: #00e5a0;
+      --accent2: #ff3d3d;
+      --accent3: #ffd166;
+      --text: #e8e8f0;
+      --muted: #6b6b7e;
+      --border: rgba(255,255,255,0.06);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── GRID NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(255,255,255,0.015) 60px),
+        repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(255,255,255,0.015) 60px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HERO ── */
+    header {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 6rem 2rem 4rem;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 700px; height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,229,160,0.18) 0%, transparent 70%);
+      top: -150px; right: -200px;
+      pointer-events: none;
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    .hero-glow2 {
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,61,61,0.12) 0%, transparent 70%);
+      bottom: 0; left: -100px;
+      pointer-events: none;
+      animation: pulse 8s ease-in-out infinite reverse;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.08); opacity: 0.7; }
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 0.3em 1em;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s forwards 0.2s;
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 12vw, 11rem);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      opacity: 0;
+      animation: fadeUp 0.9s forwards 0.4s;
+    }
+
+    h1 span { color: var(--accent); }
+
+    .hero-sub {
+      max-width: 520px;
+      margin-top: 2rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+      opacity: 0;
+      animation: fadeUp 0.9s forwards 0.6s;
+    }
+
+    .scroll-hint {
+      margin-top: 4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeUp 0.9s forwards 1s;
+    }
+
+    .scroll-line {
+      width: 48px; height: 1px;
+      background: var(--accent);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SECTIONS ── */
+    section { position: relative; z-index: 1; padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      line-height: 1;
+      margin-bottom: 1.5rem;
+    }
+
+    p { color: #b0b0c0; margin-bottom: 1rem; }
+
+    /* ── DIAGRAM BLOCK ── */
+    .diagram {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .diagram::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+    }
+
+    .diagram-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── FLOW CHART ── */
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+
+    .flow-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .flow-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1rem 1.2rem;
+      text-align: center;
+      min-width: 110px;
+      position: relative;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .flow-box:hover { border-color: var(--accent); transform: translateY(-4px); }
+
+    .flow-icon {
+      font-size: 1.8rem;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .flow-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.05em;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .flow-arrow {
+      font-size: 1.5rem;
+      color: var(--accent);
+      margin: 0 0.5rem;
+      flex-shrink: 0;
+    }
+
+    /* ── COMPONENT CARDS ── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .card:hover { transform: translateY(-6px); border-color: rgba(0,229,160,0.3); }
+
+    .card-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem;
+      color: rgba(0,229,160,0.08);
+      position: absolute;
+      top: 0.5rem; right: 1rem;
+      line-height: 1;
+    }
+
+    .card-icon { font-size: 2rem; margin-bottom: 1rem; }
+
+    .card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+    }
+
+    .card p { font-size: 0.9rem; margin: 0; }
+
+    .card.highlight { border-color: rgba(0,229,160,0.25); }
+    .card.highlight .card-number { color: rgba(0,229,160,0.15); }
+
+    /* ── STATS ROW ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      margin: 3rem 0;
+    }
+
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      line-height: 1;
+      color: var(--accent);
+    }
+
+    .stat-unit { font-size: 1rem; color: var(--muted); margin-top: 0.3rem; }
+
+    /* ── VS TABLE ── */
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin: 3rem 0;
+    }
+
+    .comp-col {
+      background: var(--card);
+      border-radius: 1rem;
+      padding: 2rem;
+      border: 1px solid var(--border);
+    }
+
+    .comp-col.green { border-color: rgba(0,229,160,0.3); }
+    .comp-col.red   { border-color: rgba(255,61,61,0.2); }
+
+    .comp-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .comp-col.green .comp-title { color: var(--accent); }
+    .comp-col.red   .comp-title { color: var(--accent2); }
+
+    .comp-list { list-style: none; }
+
+    .comp-list li {
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+      color: #b0b0c0;
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .comp-list li:last-child { border-bottom: none; }
+
+    /* ── BATTERY SECTION ── */
+    .battery-bar-wrap {
+      background: rgba(255,255,255,0.05);
+      border-radius: 999px;
+      height: 12px;
+      margin: 0.5rem 0 1.5rem;
+      overflow: hidden;
+    }
+
+    .battery-bar {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), #00c87a);
+      animation: grow 1.5s ease forwards;
+      width: 0;
+    }
+
+    @keyframes grow {
+      to { width: var(--target-width); }
+    }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.2rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+
+    footer span { color: var(--accent); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      max-width: 1100px; margin: 0 auto;
+    }
+
+    @media (max-width: 600px) {
+      .comparison { grid-template-columns: 1fr; }
+      .flow { flex-direction: column; }
+      .flow-arrow { transform: rotate(90deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HERO ── -->
+  <header>
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+    <div style="position:relative; z-index:1; max-width:1100px; margin:0 auto; width:100%;">
+      <div class="tag">Tecnologia Verde · Mobilidade Elétrica</div>
+      <h1>MOTOS<br><span>ELÉTRI</span>CAS</h1>
+      <p class="hero-sub">Do motor de combustão ao elétrico — entenda como a revolução silenciosa das duas rodas realmente funciona.</p>
+      <div class="scroll-hint">
+        <div class="scroll-line"></div>
+        Role para descobrir
+      </div>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- ── COMO FUNCIONA ── -->
+  <section>
+    <div class="section-label">Princípio básico</div>
+    <h2>O CORAÇÃO<br>ELÉTRICO</h2>
+    <p>Diferente das motos a combustão, as motos elétricas não possuem pistões, velas ou caixa de câmbio. Tudo se resume a três sistemas principais que trabalham em harmonia.</p>
+
+    <div class="diagram">
+      <div class="diagram-title">⚡ Fluxo de energia</div>
+      <div class="flow">
+        <div class="flow-item">
+          <div class="flow-box">
+            <span class="flow-icon">🔋</span>
+            <span class="flow-label">BATERIA</span>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <div class="flow-box">
+            <span class="flow-icon">🖥️</span>
+            <span class="flow-label">CONTROLADOR</span>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <div class="flow-box">
+            <span class="flow-icon">⚙️</span>
+            <span class="flow-label">MOTOR</span>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <div class="flow-box">
+            <span class="flow-icon">🛞</span>
+            <span class="flow-label">RODA</span>
+          </div>
+        </div>
+      </div>
+      <p style="text-align:center; font-size:0.85rem; color:var(--muted); margin-top:1rem;">
+        A energia flui da bateria → controlador ajusta a potência → motor converte em movimento → roda gira.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── COMPONENTES ── -->
+  <section>
+    <div class="section-label">Anatomia</div>
+    <h2>COMPONENTES<br>PRINCIPAIS</h2>
+    <p>Cada peça tem um papel crítico. Veja como cada componente funciona individualmente.</p>
+
+    <div class="cards">
+
+      <div class="card highlight">
+        <div class="card-number">01</div>
+        <div class="card-icon">🔋</div>
+        <h3>Pacote de Baterias</h3>
+        <p>Geralmente compostas de células de íons de lítio (Li-ion) ou fosfato de ferro-lítio (LiFePO₄). São agrupadas em módulos e gerenciadas pelo BMS (Battery Management System), que controla temperatura, carga e descarga para garantir vida útil e segurança.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-number">02</div>
+        <div class="card-icon">⚙️</div>
+        <h3>Motor Elétrico</h3>
+        <p>Os mais comuns são os motores BLDC (brushless DC) e os de indução AC. Funcionam pelo princípio eletromagnético: corrente elétrica gera campos magnéticos que fazem o rotor girar. São extremamente eficientes — aproveitam até 95% da energia.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-number">03</div>
+        <div class="card-icon">🖥️</div>
+        <h3>Controlador (VCU/MCU)</h3>
+        <p>É o "cérebro" da moto. Interpreta o comando do acelerador e converte a energia DC da bateria em AC para o motor (via inversor). Regula velocidade, torque e frenagem regenerativa em tempo real, adaptando a potência à demanda.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-number">04</div>
+        <div class="card-icon">🔌</div>
+        <h3>Carregador / OBC</h3>
+        <p>O On-Board Charger converte a corrente alternada (AC) da tomada em corrente contínua (DC) para carregar as baterias. Modelos mais modernos suportam carregamento rápido DC, que pode recarregar 80% da bateria em 20–40 minutos.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-number">05</div>
+        <div class="card-icon">♻️</div>
+        <h3>Frenagem Regenerativa</h3>
+        <p>Ao soltar o acelerador ou frear, o motor funciona como gerador: converte a energia cinética de volta em energia elétrica e devolve à bateria. Esse processo aumenta a autonomia em até 15–20% no uso urbano.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-number">06</div>
+        <div class="card-icon">🌡️</div>
+        <h3>Sistema Térmico (BMS)</h3>
+        <p>O Battery Management System monitora cada célula individualmente. Baterias Li-ion funcionam melhor entre 15°C e 35°C. O BMS usa refrigeração líquida ou a ar para manter a temperatura ideal, prolongando a vida do pacote.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── STATS ── -->
+  <section>
+    <div class="section-label">Números que impressionam</div>
+    <h2>EFICIÊNCIA<br>EM DADOS</h2>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">95%</div>
+        <div class="stat-unit">eficiência do motor elétrico</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">30%</div>
+        <div class="stat-unit">custo de energia vs. gasolina</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0</div>
+        <div class="stat-unit">emissões diretas de CO₂</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">500+</div>
+        <div class="stat-unit">km de autonomia (modelos topo)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── BATERIA ── -->
+  <section>
+    <div class="section-label">Autonomia</div>
+    <h2>TIPOS DE<br>BATERIA</h2>
+    <p>A escolha da química da bateria define autonomia, peso, custo e longevidade.</p>
+
+    <div class="diagram">
+      <div class="diagram-title">🔋 Comparativo de tecnologias</div>
+
+      <div class="bar-label"><span>Li-ion NMC — Alta densidade energética</span><span>170–250 Wh/kg</span></div>
+      <div class="battery-bar-wrap"><div class="battery-bar" style="--target-width:90%"></div></div>
+
+      <div class="bar-label"><span>LiFePO₄ — Alta durabilidade, mais pesada</span><span>120–160 Wh/kg</span></div>
+      <div class="battery-bar-wrap"><div class="battery-bar" style="--target-width:65%; animation-delay:0.3s"></div></div>
+
+      <div class="bar-label"><span>Li-ion NCA — Usada pela Tesla / alta performance</span><span>200–260 Wh/kg</span></div>
+      <div class="battery-bar-wrap"><div class="battery-bar" style="--target-width:95%; animation-delay:0.6s"></div></div>
+
+      <div class="bar-label"><span>Solid-State (futuro) — Próxima geração</span><span>400+ Wh/kg</span></div>
+      <div class="battery-bar-wrap">
+        <div class="battery-bar" style="--target-width:40%; animation-delay:0.9s; background: linear-gradient(90deg, var(--accent3), #ff9900);"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ELÉTRICA vs COMBUSTÃO ── -->
+  <section>
+    <div class="section-label">Comparativo</div>
+    <h2>ELÉTRICA<br>VS COMBUSTÃO</h2>
+
+    <div class="comparison">
+      <div class="comp-col green">
+        <div class="comp-title">⚡ Elétrica</div>
+        <ul class="comp-list">
+          <li>✅ Torque máximo desde 0 rpm</li>
+          <li>✅ Manutenção mínima (sem óleo, filtros, velas)</li>
+          <li>✅ Custo por km muito menor</li>
+          <li>✅ Zero emissões locais</li>
+          <li>✅ Operação quase silenciosa</li>
+          <li>✅ Frenagem regenerativa</li>
+          <li>✅ Menor número de peças móveis</li>
+        </ul>
+      </div>
+      <div class="comp-col red">
+        <div class="comp-title">⛽ Combustão</div>
+        <ul class="comp-list">
+          <li>⚠️ Torque cresce com rotação</li>
+          <li>⚠️ Manutenção periódica cara</li>
+          <li>⚠️ Custo de combustível elevado</li>
+          <li>⚠️ Emite CO₂ e NOx</li>
+          <li>⚠️ Ruído do motor</li>
+          <li>⚠️ Sem recuperação de energia</li>
+          <li>⚠️ Sistema mais complexo</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RECARGA ── -->
+  <section>
+    <div class="section-label">Infraestrutura</div>
+    <h2>COMO E ONDE<br>RECARREGAR</h2>
+    <p>A recarga é um dos pontos mais importantes ao considerar uma moto elétrica. Existem três níveis de carregamento:</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">🏠</div>
+        <h3>Nível 1 — Tomada Comum</h3>
+        <p>110V ou 220V convencional. Recarga lenta: 8 a 12 horas para completar. Ideal para uso noturno em casa. Não requer infraestrutura adicional.</p>
+      </div>
+      <div class="card highlight">
+        <div class="card-icon">🔌</div>
+        <h3>Nível 2 — Wallbox</h3>
+        <p>Carregador dedicado instalado em casa ou estacionamentos. Potência de 3,7 a 22 kW. Recarga em 2 a 4 horas. Mais comum no Brasil para veículos elétricos.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚡</div>
+        <h3>Nível 3 — DC Rápido</h3>
+        <p>Carregamento ultra-rápido de 50 a 150+ kW. Disponível em postos de carregamento públicos. Recarrega 80% em 20–40 minutos. Ideal para viagens longas.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FUTURO ── -->
+  <section>
+    <div class="section-label">Perspectiva</div>
+    <h2>O FUTURO<br>É ELÉTRICO</h2>
+    <p>A indústria de motos elétricas está evoluindo rapidamente. As próximas inovações que vão mudar o setor:</p>
+
+    <div class="diagram">
+      <div class="diagram-title">🚀 Tecnologias emergentes</div>
+      <div class="cards" style="margin-top:1rem;">
+        <div class="card">
+          <div class="card-icon">🔬</div>
+          <h3>Baterias Solid-State</h3>
+          <p>Eletrólito sólido no lugar do líquido — mais seguras, mais densas e com ciclos de carga muito superiores. Estimativa de chegada ao mercado: 2026–2028.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔄</div>
+          <h3>Battery Swap</h3>
+          <p>Troca de bateria em menos de 2 minutos em postos especializados. Eliminam a ansiedade de autonomia e o tempo de recarga. Já em expansão na Ásia.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🤖</div>
+          <h3>V2G — Vehicle to Grid</h3>
+          <p>A moto como fonte de energia: baterias conectadas à rede elétrica podem fornecer energia de volta à casa ou à rede nos horários de pico.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <footer>
+    <p>Feito com <span>⚡</span> para explorar a mobilidade elétrica  joao victor crestani· 2026</p>
+    <p style="margin-top:0.5rem; opacity:0.4;">Motos Elétricas — Como Funcionam</p>
+  </footer>
+
+</body>
+</html>
